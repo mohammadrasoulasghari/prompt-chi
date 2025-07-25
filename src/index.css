@@ -110,6 +110,8 @@ All colors MUST be HSL.
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-vazir;
+    direction: rtl;
+    text-align: right;
   }
 }
