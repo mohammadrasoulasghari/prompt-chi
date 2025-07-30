@@ -2,7 +2,8 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Search, Filter, X, Download } from "lucide-react";
-import { CATEGORIES, MODEL_TYPES, PromptFilters, Prompt } from "@/types/prompt";
+import { CATEGORIES, PromptFilters } from "@/types/prompt";
+import { Prompt } from "@/hooks/usePrompts";
 import { useToast } from "@/hooks/use-toast";
 
 interface PromptFiltersProps {
@@ -25,12 +26,7 @@ export default function PromptFiltersComponent({ filters, onFiltersChange, promp
     });
   };
 
-  const handleModelTypeChange = (value: string) => {
-    onFiltersChange({ 
-      ...filters, 
-      modelType: value === "همه" ? undefined : value 
-    });
-  };
+  // Remove model type filter for now
 
   const handleClearFilters = () => {
     onFiltersChange({});
@@ -46,20 +42,17 @@ export default function PromptFiltersComponent({ filters, onFiltersChange, promp
       totalCount: dataToExport.length,
       filters: hasActiveFilters ? {
         searchQuery: filters.searchQuery || null,
-        category: filters.category || null,
-        modelType: filters.modelType || null
+        category: filters.category || null
       } : null,
       prompts: dataToExport.map(prompt => ({
         id: prompt.id,
         title: prompt.title,
         content: prompt.content,
         category: prompt.category,
-        modelType: prompt.modelType,
         tags: prompt.tags,
-        createdAt: prompt.createdAt,
-        updatedAt: prompt.updatedAt,
-        hasVersionHistory: !!(prompt.versions && prompt.versions.length > 0),
-        versionsCount: prompt.versions?.length || 0
+        created_at: prompt.created_at,
+        updated_at: prompt.updated_at,
+        is_favorite: prompt.is_favorite
       }))
     };
 
@@ -83,7 +76,7 @@ export default function PromptFiltersComponent({ filters, onFiltersChange, promp
     });
   };
 
-  const hasActiveFilters = filters.category || filters.modelType || filters.searchQuery;
+  const hasActiveFilters = filters.category || filters.searchQuery;
 
   return (
     <div className="bg-card/50 backdrop-blur-sm rounded-lg p-4 border border-accent/30 space-y-4">
@@ -93,7 +86,7 @@ export default function PromptFiltersComponent({ filters, onFiltersChange, promp
       </div>
       
       <div className="flex items-center justify-between">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-3 flex-1">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3 flex-1">
           <div className="relative">
             <Search className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
             <Input
@@ -121,22 +114,6 @@ export default function PromptFiltersComponent({ filters, onFiltersChange, promp
             </SelectContent>
           </Select>
 
-          <Select 
-            value={filters.modelType || "همه"} 
-            onValueChange={handleModelTypeChange}
-          >
-            <SelectTrigger className="bg-background/70">
-              <SelectValue placeholder="نوع مدل" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="همه">همه مدل‌ها</SelectItem>
-              {MODEL_TYPES.map((model) => (
-                <SelectItem key={model} value={model}>
-                  {model}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
 
           {hasActiveFilters && (
             <Button

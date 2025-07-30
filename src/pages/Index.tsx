@@ -1,20 +1,30 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
-import { Plus, Sparkles, Database, Zap } from "lucide-react";
-import { Prompt, PromptFilters, PromptVersion } from "@/types/prompt";
-import { useLocalStorage } from "@/hooks/useLocalStorage";
+import { Plus, Sparkles, Database, Zap, LogOut, User } from "lucide-react";
+import { useAuth } from "@/hooks/useAuth";
+import { usePrompts, type Prompt } from "@/hooks/usePrompts";
+import { PromptFilters, PromptVersion } from "@/types/prompt";
 import PromptCard from "@/components/PromptCard";
 import PromptForm from "@/components/PromptForm";
 import PromptFiltersComponent from "@/components/PromptFilters";
 import { useToast } from "@/hooks/use-toast";
 
 export default function Index() {
-  const [prompts, setPrompts] = useLocalStorage<Prompt[]>("prompts", []);
-  const [editingPrompt, setEditingPrompt] = useState<Prompt | null>(null);
+  const { user, loading, signOut } = useAuth();
+  const { prompts, addPrompt, updatePrompt, deletePrompt } = usePrompts();
+  const [editingPrompt, setEditingPrompt] = useState<any>(null);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [filters, setFilters] = useState<PromptFilters>({});
   const { toast } = useToast();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!loading && !user) {
+      navigate('/auth');
+    }
+  }, [user, loading, navigate]);
 
   const filteredPrompts = useMemo(() => {
     return prompts.filter((prompt) => {
@@ -24,104 +34,50 @@ export default function Index() {
         prompt.tags.some(tag => tag.toLowerCase().includes(filters.searchQuery.toLowerCase()));
       
       const matchesCategory = !filters.category || prompt.category === filters.category;
-      const matchesModel = !filters.modelType || prompt.modelType === filters.modelType;
+      const matchesModel = true; // Remove modelType filter for now
       
       return matchesSearch && matchesCategory && matchesModel;
     });
   }, [prompts, filters]);
 
-  const handleAddPrompt = (promptData: Omit<Prompt, 'id' | 'createdAt' | 'updatedAt'>) => {
-    const newPrompt: Prompt = {
-      ...promptData,
-      id: Date.now().toString(),
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    };
-    
-    setPrompts([newPrompt, ...prompts]);
-    setIsFormOpen(false);
-    toast({
-      title: "پرامپت اضافه شد!",
-      description: "پرامپت جدید با موفقیت ذخیره شد.",
-    });
+  const handleAddPrompt = async (promptData: any) => {
+    try {
+      await addPrompt(promptData);
+      setIsFormOpen(false);
+    } catch (error) {
+      // Error handling is done in usePrompts hook
+    }
   };
 
-  const handleEditPrompt = (promptData: Omit<Prompt, 'id' | 'createdAt' | 'updatedAt'>) => {
+  const handleEditPrompt = async (promptData: any) => {
     if (!editingPrompt) return;
     
-    // ذخیره نسخه قبلی در تاریخچه
-    const previousVersion: PromptVersion = {
-      id: Date.now().toString(),
-      title: editingPrompt.title,
-      content: editingPrompt.content,
-      category: editingPrompt.category,
-      modelType: editingPrompt.modelType,
-      tags: editingPrompt.tags,
-      timestamp: editingPrompt.updatedAt,
-      changeNote: `ویرایش شده در ${new Intl.DateTimeFormat('fa-IR').format(new Date())}`
-    };
-    
-    const updatedPrompt: Prompt = {
-      ...promptData,
-      id: editingPrompt.id,
-      createdAt: editingPrompt.createdAt,
-      updatedAt: new Date(),
-      versions: [previousVersion, ...(editingPrompt.versions || [])]
-    };
-    
-    setPrompts(prompts.map(p => p.id === editingPrompt.id ? updatedPrompt : p));
-    setEditingPrompt(null);
-    setIsFormOpen(false);
-    toast({
-      title: "پرامپت به‌روزرسانی شد!",
-      description: "تغییرات با موفقیت ذخیره شد.",
-    });
+    try {
+      await updatePrompt(editingPrompt.id, promptData);
+      setEditingPrompt(null);
+      setIsFormOpen(false);
+    } catch (error) {
+      // Error handling is done in usePrompts hook
+    }
   };
 
   const handleRestoreVersion = (promptId: string, version: PromptVersion) => {
-    const currentPrompt = prompts.find(p => p.id === promptId);
-    if (!currentPrompt) return;
-
-    // ذخیره نسخه فعلی در تاریخچه
-    const currentVersion: PromptVersion = {
-      id: Date.now().toString(),
-      title: currentPrompt.title,
-      content: currentPrompt.content,
-      category: currentPrompt.category,
-      modelType: currentPrompt.modelType,
-      tags: currentPrompt.tags,
-      timestamp: currentPrompt.updatedAt,
-      changeNote: `بازگردانی از نسخه ${new Intl.DateTimeFormat('fa-IR').format(version.timestamp)}`
-    };
-
-    const restoredPrompt: Prompt = {
-      ...currentPrompt,
-      title: version.title,
-      content: version.content,
-      category: version.category,
-      modelType: version.modelType,
-      tags: version.tags,
-      updatedAt: new Date(),
-      versions: [currentVersion, ...(currentPrompt.versions || [])]
-    };
-
-    setPrompts(prompts.map(p => p.id === promptId ? restoredPrompt : p));
+    // This functionality will be implemented later when we add versioning to the database
     toast({
-      title: "نسخه بازگردانی شد!",
-      description: "پرامپت به نسخه انتخابی بازگردانده شد.",
+      title: "قابلیت بازگردانی",
+      description: "این قابلیت در آینده اضافه خواهد شد",
     });
   };
 
-  const handleDeletePrompt = (id: string) => {
-    setPrompts(prompts.filter(p => p.id !== id));
-    toast({
-      title: "پرامپت حذف شد",
-      description: "پرامپت با موفقیت حذف شد.",
-      variant: "destructive",
-    });
+  const handleDeletePrompt = async (id: string) => {
+    try {
+      await deletePrompt(id);
+    } catch (error) {
+      // Error handling is done in usePrompts hook
+    }
   };
 
-  const openEditForm = (prompt: Prompt) => {
+  const openEditForm = (prompt: any) => {
     setEditingPrompt(prompt);
     setIsFormOpen(true);
   };
@@ -150,26 +106,43 @@ export default function Index() {
               <p className="text-muted-foreground mt-2">
                 مجموعه پرامپت‌های خود را سازماندهی و مدیریت کنید
               </p>
+              {user && (
+                <p className="text-sm text-muted-foreground mt-1">
+                  <User className="w-4 h-4 inline ml-1" />
+                  خوش آمدید، {user.email}
+                </p>
+              )}
             </div>
             
-            <Dialog open={isFormOpen} onOpenChange={setIsFormOpen}>
-              <DialogTrigger asChild>
-                <Button 
-                  onClick={openAddForm}
-                  className="bg-gradient-to-r from-primary to-primary-glow hover:opacity-90 transition-opacity"
-                >
-                  <Plus className="w-4 h-4 ml-2" />
-                  پرامپت جدید
-                </Button>
-              </DialogTrigger>
-              <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
-                <PromptForm
-                  prompt={editingPrompt}
-                  onSubmit={editingPrompt ? handleEditPrompt : handleAddPrompt}
-                  onCancel={closeForm}
-                />
-              </DialogContent>
-            </Dialog>
+            <div className="flex gap-2">
+              <Button 
+                onClick={signOut}
+                variant="outline"
+                size="sm"
+              >
+                <LogOut className="w-4 h-4 ml-2" />
+                خروج
+              </Button>
+              
+              <Dialog open={isFormOpen} onOpenChange={setIsFormOpen}>
+                <DialogTrigger asChild>
+                  <Button 
+                    onClick={openAddForm}
+                    className="bg-gradient-to-r from-primary to-primary-glow hover:opacity-90 transition-opacity"
+                  >
+                    <Plus className="w-4 h-4 ml-2" />
+                    پرامپت جدید
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+                  <PromptForm
+                    prompt={editingPrompt}
+                    onSubmit={editingPrompt ? handleEditPrompt : handleAddPrompt}
+                    onCancel={closeForm}
+                  />
+                </DialogContent>
+              </Dialog>
+            </div>
           </div>
         </div>
       </div>

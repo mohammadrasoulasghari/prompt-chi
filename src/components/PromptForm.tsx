@@ -7,11 +7,12 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { X, Plus, Sparkles } from "lucide-react";
-import { Prompt, CATEGORIES, MODEL_TYPES } from "@/types/prompt";
+import { CATEGORIES } from "@/types/prompt";
+import { Prompt } from "@/hooks/usePrompts";
 
 interface PromptFormProps {
   prompt?: Prompt | null;
-  onSubmit: (prompt: Omit<Prompt, 'id' | 'createdAt' | 'updatedAt'>) => void;
+  onSubmit: (prompt: Omit<Prompt, 'id' | 'created_at' | 'updated_at' | 'user_id'>) => void;
   onCancel: () => void;
 }
 
@@ -19,7 +20,7 @@ export default function PromptForm({ prompt, onSubmit, onCancel }: PromptFormPro
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [category, setCategory] = useState("");
-  const [modelType, setModelType] = useState("");
+  const [isFavorite, setIsFavorite] = useState(false);
   const [tags, setTags] = useState<string[]>([]);
   const [newTag, setNewTag] = useState("");
 
@@ -28,7 +29,7 @@ export default function PromptForm({ prompt, onSubmit, onCancel }: PromptFormPro
       setTitle(prompt.title);
       setContent(prompt.content);
       setCategory(prompt.category);
-      setModelType(prompt.modelType);
+      setIsFavorite(prompt.is_favorite);
       setTags(prompt.tags);
     } else {
       resetForm();
@@ -39,7 +40,7 @@ export default function PromptForm({ prompt, onSubmit, onCancel }: PromptFormPro
     setTitle("");
     setContent("");
     setCategory("");
-    setModelType("");
+    setIsFavorite(false);
     setTags([]);
     setNewTag("");
   };
@@ -57,14 +58,14 @@ export default function PromptForm({ prompt, onSubmit, onCancel }: PromptFormPro
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!title.trim() || !content.trim() || !category || !modelType) return;
+    if (!title.trim() || !content.trim() || !category) return;
 
     onSubmit({
       title: title.trim(),
       content: content.trim(),
       category,
-      modelType,
-      tags
+      tags,
+      is_favorite: isFavorite
     });
     
     if (!prompt) {
@@ -118,17 +119,15 @@ export default function PromptForm({ prompt, onSubmit, onCancel }: PromptFormPro
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="modelType" className="text-sm font-medium">نوع مدل</Label>
-              <Select value={modelType} onValueChange={setModelType} required>
-                <SelectTrigger className="bg-background/50">
-                  <SelectValue placeholder="انتخاب مدل" />
-                </SelectTrigger>
-                <SelectContent>
-                  {MODEL_TYPES.map((model) => (
-                    <SelectItem key={model} value={model}>{model}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <Label className="text-sm font-medium flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  checked={isFavorite}
+                  onChange={(e) => setIsFavorite(e.target.checked)}
+                  className="rounded"
+                />
+                علاقه‌مندی
+              </Label>
             </div>
           </div>
 

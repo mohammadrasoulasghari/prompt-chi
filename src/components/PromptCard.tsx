@@ -2,7 +2,8 @@ import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Edit, Trash2, Copy, Calendar } from "lucide-react";
-import { Prompt, PromptVersion } from "@/types/prompt";
+import { PromptVersion } from "@/types/prompt";
+import { Prompt } from "@/hooks/usePrompts";
 import { useToast } from "@/hooks/use-toast";
 import PromptHistory from "./PromptHistory";
 
@@ -51,9 +52,11 @@ export default function PromptCard({ prompt, onEdit, onDelete, onRestoreVersion 
             <Badge variant="secondary" className="text-xs bg-primary/10 text-primary">
               {prompt.category}
             </Badge>
-            <Badge variant="outline" className="text-xs">
-              {prompt.modelType}
-            </Badge>
+            {prompt.is_favorite && (
+              <Badge variant="outline" className="text-xs bg-yellow-100 text-yellow-800">
+                ⭐
+              </Badge>
+            )}
           </div>
         </div>
       </CardHeader>
@@ -75,7 +78,7 @@ export default function PromptCard({ prompt, onEdit, onDelete, onRestoreVersion 
         
         <div className="flex items-center gap-1 mt-3 text-xs text-muted-foreground">
           <Calendar className="w-3 h-3" />
-          <span>ایجاد: {formatDate(prompt.createdAt)}</span>
+          <span>ایجاد: {formatDate(new Date(prompt.created_at))}</span>
         </div>
       </CardContent>
       
@@ -106,12 +109,7 @@ export default function PromptCard({ prompt, onEdit, onDelete, onRestoreVersion 
           >
             <Trash2 className="w-4 h-4" />
           </Button>
-          {prompt.versions && prompt.versions.length > 0 && (
-            <PromptHistory 
-              versions={prompt.versions} 
-              onRestoreVersion={(version) => onRestoreVersion(prompt.id, version)}
-            />
-          )}
+          {/* Version history will be added later */}
         </div>
       </CardFooter>
     </Card>
