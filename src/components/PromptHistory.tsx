@@ -37,7 +37,7 @@ export default function PromptHistory({ versions, onRestoreVersion }: PromptHist
   const formatDate = (date: Date) => {
     return new Intl.DateTimeFormat('fa-IR', {
       year: 'numeric',
-      month: 'short',
+      month: 'long',
       day: 'numeric',
     }).format(new Date(date));
   };
