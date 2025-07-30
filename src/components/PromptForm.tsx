@@ -7,7 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { X, Plus, Sparkles } from "lucide-react";
-import { CATEGORIES } from "@/types/prompt";
+import { CATEGORIES, MODEL_TYPES } from "@/types/prompt";
 import { Prompt } from "@/hooks/usePrompts";
 
 interface PromptFormProps {
@@ -20,7 +20,7 @@ export default function PromptForm({ prompt, onSubmit, onCancel }: PromptFormPro
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [category, setCategory] = useState("");
-  const [isFavorite, setIsFavorite] = useState(false);
+  const [modelTypes, setModelTypes] = useState<string[]>([]);
   const [tags, setTags] = useState<string[]>([]);
   const [newTag, setNewTag] = useState("");
 
@@ -29,7 +29,7 @@ export default function PromptForm({ prompt, onSubmit, onCancel }: PromptFormPro
       setTitle(prompt.title);
       setContent(prompt.content);
       setCategory(prompt.category);
-      setIsFavorite(prompt.is_favorite);
+      setModelTypes(prompt.model_types || []);
       setTags(prompt.tags);
     } else {
       resetForm();
@@ -40,7 +40,7 @@ export default function PromptForm({ prompt, onSubmit, onCancel }: PromptFormPro
     setTitle("");
     setContent("");
     setCategory("");
-    setIsFavorite(false);
+    setModelTypes([]);
     setTags([]);
     setNewTag("");
   };
@@ -58,14 +58,15 @@ export default function PromptForm({ prompt, onSubmit, onCancel }: PromptFormPro
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!title.trim() || !content.trim() || !category) return;
+    if (!title.trim() || !content.trim() || !category || modelTypes.length === 0) return;
 
     onSubmit({
       title: title.trim(),
       content: content.trim(),
       category,
+      model_types: modelTypes,
       tags,
-      is_favorite: isFavorite
+      is_favorite: false
     });
     
     if (!prompt) {
@@ -103,7 +104,7 @@ export default function PromptForm({ prompt, onSubmit, onCancel }: PromptFormPro
             />
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="category" className="text-sm font-medium">دسته‌بندی</Label>
               <Select value={category} onValueChange={setCategory} required>
@@ -119,15 +120,26 @@ export default function PromptForm({ prompt, onSubmit, onCancel }: PromptFormPro
             </div>
 
             <div className="space-y-2">
-              <Label className="text-sm font-medium flex items-center gap-2">
-                <input
-                  type="checkbox"
-                  checked={isFavorite}
-                  onChange={(e) => setIsFavorite(e.target.checked)}
-                  className="rounded"
-                />
-                علاقه‌مندی
-              </Label>
+              <Label className="text-sm font-medium">مدل‌های مناسب (چندتایی انتخاب کنید)</Label>
+              <div className="grid grid-cols-2 gap-2">
+                {MODEL_TYPES.map((model) => (
+                  <Label key={model} className="flex items-center gap-2 text-sm cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={modelTypes.includes(model)}
+                      onChange={(e) => {
+                        if (e.target.checked) {
+                          setModelTypes([...modelTypes, model]);
+                        } else {
+                          setModelTypes(modelTypes.filter(m => m !== model));
+                        }
+                      }}
+                      className="rounded"
+                    />
+                    {model}
+                  </Label>
+                ))}
+              </div>
             </div>
           </div>
 

@@ -1,7 +1,7 @@
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Edit, Trash2, Copy, Calendar } from "lucide-react";
+import { Edit, Trash2, Copy, Calendar, Star } from "lucide-react";
 import { PromptVersion } from "@/types/prompt";
 import { Prompt } from "@/hooks/usePrompts";
 import { useToast } from "@/hooks/use-toast";
@@ -11,10 +11,11 @@ interface PromptCardProps {
   prompt: Prompt;
   onEdit: (prompt: Prompt) => void;
   onDelete: (id: string) => void;
+  onToggleFavorite: (id: string) => void;
   onRestoreVersion: (promptId: string, version: PromptVersion) => void;
 }
 
-export default function PromptCard({ prompt, onEdit, onDelete, onRestoreVersion }: PromptCardProps) {
+export default function PromptCard({ prompt, onEdit, onDelete, onToggleFavorite, onRestoreVersion }: PromptCardProps) {
   const { toast } = useToast();
 
   const handleCopy = async () => {
@@ -48,15 +49,19 @@ export default function PromptCard({ prompt, onEdit, onDelete, onRestoreVersion 
           <h3 className="font-semibold text-lg text-foreground group-hover:text-primary transition-colors">
             {prompt.title}
           </h3>
-          <div className="flex gap-1">
+          <div className="flex gap-1 items-center">
             <Badge variant="secondary" className="text-xs bg-primary/10 text-primary">
               {prompt.category}
             </Badge>
-            {prompt.is_favorite && (
-              <Badge variant="outline" className="text-xs bg-yellow-100 text-yellow-800">
-                ⭐
-              </Badge>
-            )}
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => onToggleFavorite(prompt.id)}
+              className="p-1 h-6 w-6 hover:bg-yellow-100 hover:text-yellow-600"
+              title={prompt.is_favorite ? "حذف از علاقه‌مندی‌ها" : "افزودن به علاقه‌مندی‌ها"}
+            >
+              <Star className={`w-4 h-4 ${prompt.is_favorite ? 'fill-yellow-500 text-yellow-500' : ''}`} />
+            </Button>
           </div>
         </div>
       </CardHeader>
@@ -66,8 +71,18 @@ export default function PromptCard({ prompt, onEdit, onDelete, onRestoreVersion 
           {prompt.content}
         </p>
         
-        {prompt.tags.length > 0 && (
+        {prompt.model_types && prompt.model_types.length > 0 && (
           <div className="flex flex-wrap gap-1 mt-3">
+            {prompt.model_types.map((model, index) => (
+              <Badge key={index} variant="outline" className="text-xs bg-blue-50 text-blue-700 border-blue-200">
+                {model}
+              </Badge>
+            ))}
+          </div>
+        )}
+
+        {prompt.tags.length > 0 && (
+          <div className="flex flex-wrap gap-1 mt-2">
             {prompt.tags.map((tag, index) => (
               <Badge key={index} variant="outline" className="text-xs bg-accent/50">
                 #{tag}

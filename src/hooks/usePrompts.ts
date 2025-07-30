@@ -7,6 +7,7 @@ export interface Prompt {
   title: string;
   content: string;
   category: string;
+  model_types: string[];
   tags: string[];
   is_favorite: boolean;
   created_at: string;
