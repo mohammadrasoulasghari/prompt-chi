@@ -138,7 +138,10 @@ export default function PromptHistory({ versions, onRestoreVersion }: PromptHist
                       <Button
                         variant="default"
                         size="sm"
-                        onClick={() => onRestoreVersion(selectedVersion)}
+                        onClick={() => {
+                          onRestoreVersion(selectedVersion);
+                          setSelectedVersion(null);
+                        }}
                         className="bg-primary hover:bg-primary/90"
                       >
                         <ArrowRight className="w-4 h-4 ml-2" />

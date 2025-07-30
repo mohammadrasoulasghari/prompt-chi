@@ -7,6 +7,7 @@ import { useLocalStorage } from "@/hooks/useLocalStorage";
 import PromptCard from "@/components/PromptCard";
 import PromptForm from "@/components/PromptForm";
 import PromptFiltersComponent from "@/components/PromptFilters";
+import ExportButton from "@/components/ExportButton";
 import { useToast } from "@/hooks/use-toast";
 
 export default function Index() {
@@ -152,24 +153,32 @@ export default function Index() {
               </p>
             </div>
             
-            <Dialog open={isFormOpen} onOpenChange={setIsFormOpen}>
-              <DialogTrigger asChild>
-                <Button 
-                  onClick={openAddForm}
-                  className="bg-gradient-to-r from-primary to-primary-glow hover:opacity-90 transition-opacity"
-                >
-                  <Plus className="w-4 h-4 ml-2" />
-                  پرامپت جدید
-                </Button>
-              </DialogTrigger>
-              <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
-                <PromptForm
-                  prompt={editingPrompt}
-                  onSubmit={editingPrompt ? handleEditPrompt : handleAddPrompt}
-                  onCancel={closeForm}
-                />
-              </DialogContent>
-            </Dialog>
+            <div className="flex items-center gap-3">
+              <ExportButton 
+                prompts={prompts}
+                filteredPrompts={filteredPrompts}
+                hasActiveFilters={!!(filters.searchQuery || filters.category || filters.modelType)}
+              />
+              
+              <Dialog open={isFormOpen} onOpenChange={setIsFormOpen}>
+                <DialogTrigger asChild>
+                  <Button 
+                    onClick={openAddForm}
+                    className="bg-gradient-to-r from-primary to-primary-glow hover:opacity-90 transition-opacity"
+                  >
+                    <Plus className="w-4 h-4 ml-2" />
+                    پرامپت جدید
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+                  <PromptForm
+                    prompt={editingPrompt}
+                    onSubmit={editingPrompt ? handleEditPrompt : handleAddPrompt}
+                    onCancel={closeForm}
+                  />
+                </DialogContent>
+              </Dialog>
+            </div>
           </div>
         </div>
       </div>
