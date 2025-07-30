@@ -106,16 +106,13 @@ export default function PromptCard({ prompt, onEdit, onDelete, onRestoreVersion 
           >
             <Trash2 className="w-4 h-4" />
           </Button>
-        </div>
-        
-        {prompt.versions && prompt.versions.length > 0 && (
-          <div className="mt-3 w-full">
+          {prompt.versions && prompt.versions.length > 0 && (
             <PromptHistory 
               versions={prompt.versions} 
               onRestoreVersion={(version) => onRestoreVersion(prompt.id, version)}
             />
-          </div>
-        )}
+          )}
+        </div>
       </CardFooter>
     </Card>
   );

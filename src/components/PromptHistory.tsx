@@ -39,6 +39,14 @@ export default function PromptHistory({ versions, onRestoreVersion }: PromptHist
       year: 'numeric',
       month: 'short',
       day: 'numeric',
+    }).format(new Date(date));
+  };
+
+  const formatDateTime = (date: Date) => {
+    return new Intl.DateTimeFormat('fa-IR', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
       hour: '2-digit',
       minute: '2-digit'
     }).format(new Date(date));
@@ -89,10 +97,10 @@ export default function PromptHistory({ versions, onRestoreVersion }: PromptHist
                         <Badge variant="outline" className="text-xs">
                           نسخه {versions.length - index}
                         </Badge>
-                        <span className="text-xs text-muted-foreground flex items-center gap-1">
+                        <div className="text-xs text-muted-foreground flex items-center gap-1">
                           <Clock className="w-3 h-3" />
-                          {formatDate(version.timestamp)}
-                        </span>
+                          <span>{formatDate(version.timestamp)}</span>
+                        </div>
                       </div>
                     </CardHeader>
                     <CardContent className="pt-0">
@@ -175,7 +183,7 @@ export default function PromptHistory({ versions, onRestoreVersion }: PromptHist
                   )}
 
                   <div className="text-xs text-muted-foreground">
-                    تاریخ: {formatDate(selectedVersion.timestamp)}
+                    <span>تاریخ: {formatDateTime(selectedVersion.timestamp)}</span>
                   </div>
                 </div>
               </ScrollArea>
