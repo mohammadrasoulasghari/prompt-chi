@@ -2,16 +2,18 @@ import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Edit, Trash2, Copy, Calendar } from "lucide-react";
-import { Prompt } from "@/types/prompt";
+import { Prompt, PromptVersion } from "@/types/prompt";
 import { useToast } from "@/hooks/use-toast";
+import PromptHistory from "./PromptHistory";
 
 interface PromptCardProps {
   prompt: Prompt;
   onEdit: (prompt: Prompt) => void;
   onDelete: (id: string) => void;
+  onRestoreVersion: (promptId: string, version: PromptVersion) => void;
 }
 
-export default function PromptCard({ prompt, onEdit, onDelete }: PromptCardProps) {
+export default function PromptCard({ prompt, onEdit, onDelete, onRestoreVersion }: PromptCardProps) {
   const { toast } = useToast();
 
   const handleCopy = async () => {
@@ -105,6 +107,15 @@ export default function PromptCard({ prompt, onEdit, onDelete }: PromptCardProps
             <Trash2 className="w-4 h-4" />
           </Button>
         </div>
+        
+        {prompt.versions && prompt.versions.length > 0 && (
+          <div className="mt-3 w-full">
+            <PromptHistory 
+              versions={prompt.versions} 
+              onRestoreVersion={(version) => onRestoreVersion(prompt.id, version)}
+            />
+          </div>
+        )}
       </CardFooter>
     </Card>
   );

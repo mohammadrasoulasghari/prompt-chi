@@ -2,7 +2,7 @@ import { useState, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { Plus, Sparkles, Database, Zap } from "lucide-react";
-import { Prompt, PromptFilters } from "@/types/prompt";
+import { Prompt, PromptFilters, PromptVersion } from "@/types/prompt";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import PromptCard from "@/components/PromptCard";
 import PromptForm from "@/components/PromptForm";
@@ -49,11 +49,24 @@ export default function Index() {
   const handleEditPrompt = (promptData: Omit<Prompt, 'id' | 'createdAt' | 'updatedAt'>) => {
     if (!editingPrompt) return;
     
+    // ذخیره نسخه قبلی در تاریخچه
+    const previousVersion: PromptVersion = {
+      id: Date.now().toString(),
+      title: editingPrompt.title,
+      content: editingPrompt.content,
+      category: editingPrompt.category,
+      modelType: editingPrompt.modelType,
+      tags: editingPrompt.tags,
+      timestamp: editingPrompt.updatedAt,
+      changeNote: `ویرایش شده در ${new Intl.DateTimeFormat('fa-IR').format(new Date())}`
+    };
+    
     const updatedPrompt: Prompt = {
       ...promptData,
       id: editingPrompt.id,
       createdAt: editingPrompt.createdAt,
       updatedAt: new Date(),
+      versions: [previousVersion, ...(editingPrompt.versions || [])]
     };
     
     setPrompts(prompts.map(p => p.id === editingPrompt.id ? updatedPrompt : p));
@@ -62,6 +75,40 @@ export default function Index() {
     toast({
       title: "پرامپت به‌روزرسانی شد!",
       description: "تغییرات با موفقیت ذخیره شد.",
+    });
+  };
+
+  const handleRestoreVersion = (promptId: string, version: PromptVersion) => {
+    const currentPrompt = prompts.find(p => p.id === promptId);
+    if (!currentPrompt) return;
+
+    // ذخیره نسخه فعلی در تاریخچه
+    const currentVersion: PromptVersion = {
+      id: Date.now().toString(),
+      title: currentPrompt.title,
+      content: currentPrompt.content,
+      category: currentPrompt.category,
+      modelType: currentPrompt.modelType,
+      tags: currentPrompt.tags,
+      timestamp: currentPrompt.updatedAt,
+      changeNote: `بازگردانی از نسخه ${new Intl.DateTimeFormat('fa-IR').format(version.timestamp)}`
+    };
+
+    const restoredPrompt: Prompt = {
+      ...currentPrompt,
+      title: version.title,
+      content: version.content,
+      category: version.category,
+      modelType: version.modelType,
+      tags: version.tags,
+      updatedAt: new Date(),
+      versions: [currentVersion, ...(currentPrompt.versions || [])]
+    };
+
+    setPrompts(prompts.map(p => p.id === promptId ? restoredPrompt : p));
+    toast({
+      title: "نسخه بازگردانی شد!",
+      description: "پرامپت به نسخه انتخابی بازگردانده شد.",
     });
   };
 
@@ -201,6 +248,7 @@ export default function Index() {
                 prompt={prompt}
                 onEdit={openEditForm}
                 onDelete={handleDeletePrompt}
+                onRestoreVersion={handleRestoreVersion}
               />
             ))}
           </div>

@@ -1,3 +1,14 @@
+export interface PromptVersion {
+  id: string;
+  title: string;
+  content: string;
+  category: string;
+  modelType: string;
+  tags: string[];
+  timestamp: Date;
+  changeNote?: string;
+}
+
 export interface Prompt {
   id: string;
   title: string;
@@ -7,6 +18,7 @@ export interface Prompt {
   tags: string[];
   createdAt: Date;
   updatedAt: Date;
+  versions?: PromptVersion[];
 }
 
 export interface PromptFilters {
