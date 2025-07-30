@@ -7,7 +7,6 @@ import { useLocalStorage } from "@/hooks/useLocalStorage";
 import PromptCard from "@/components/PromptCard";
 import PromptForm from "@/components/PromptForm";
 import PromptFiltersComponent from "@/components/PromptFilters";
-import ExportButton from "@/components/ExportButton";
 import { useToast } from "@/hooks/use-toast";
 
 export default function Index() {
@@ -153,39 +152,36 @@ export default function Index() {
               </p>
             </div>
             
-            <div className="flex items-center gap-3">
-              <ExportButton 
-                prompts={prompts}
-                filteredPrompts={filteredPrompts}
-                hasActiveFilters={!!(filters.searchQuery || filters.category || filters.modelType)}
-              />
-              
-              <Dialog open={isFormOpen} onOpenChange={setIsFormOpen}>
-                <DialogTrigger asChild>
-                  <Button 
-                    onClick={openAddForm}
-                    className="bg-gradient-to-r from-primary to-primary-glow hover:opacity-90 transition-opacity"
-                  >
-                    <Plus className="w-4 h-4 ml-2" />
-                    پرامپت جدید
-                  </Button>
-                </DialogTrigger>
-                <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
-                  <PromptForm
-                    prompt={editingPrompt}
-                    onSubmit={editingPrompt ? handleEditPrompt : handleAddPrompt}
-                    onCancel={closeForm}
-                  />
-                </DialogContent>
-              </Dialog>
-            </div>
+            <Dialog open={isFormOpen} onOpenChange={setIsFormOpen}>
+              <DialogTrigger asChild>
+                <Button 
+                  onClick={openAddForm}
+                  className="bg-gradient-to-r from-primary to-primary-glow hover:opacity-90 transition-opacity"
+                >
+                  <Plus className="w-4 h-4 ml-2" />
+                  پرامپت جدید
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+                <PromptForm
+                  prompt={editingPrompt}
+                  onSubmit={editingPrompt ? handleEditPrompt : handleAddPrompt}
+                  onCancel={closeForm}
+                />
+              </DialogContent>
+            </Dialog>
           </div>
         </div>
       </div>
 
       <div className="container mx-auto px-4 py-6 space-y-6">
         {/* Filters */}
-        <PromptFiltersComponent filters={filters} onFiltersChange={setFilters} />
+        <PromptFiltersComponent 
+          filters={filters} 
+          onFiltersChange={setFilters}
+          prompts={prompts}
+          filteredPrompts={filteredPrompts}
+        />
 
         {/* Stats */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">

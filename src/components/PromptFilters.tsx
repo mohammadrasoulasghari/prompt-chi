@@ -1,15 +1,19 @@
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import { Search, Filter, X } from "lucide-react";
-import { CATEGORIES, MODEL_TYPES, PromptFilters } from "@/types/prompt";
+import { Search, Filter, X, Download } from "lucide-react";
+import { CATEGORIES, MODEL_TYPES, PromptFilters, Prompt } from "@/types/prompt";
+import { useToast } from "@/hooks/use-toast";
 
 interface PromptFiltersProps {
   filters: PromptFilters;
   onFiltersChange: (filters: PromptFilters) => void;
+  prompts: Prompt[];
+  filteredPrompts: Prompt[];
 }
 
-export default function PromptFiltersComponent({ filters, onFiltersChange }: PromptFiltersProps) {
+export default function PromptFiltersComponent({ filters, onFiltersChange, prompts, filteredPrompts }: PromptFiltersProps) {
+  const { toast } = useToast();
   const handleSearchChange = (value: string) => {
     onFiltersChange({ ...filters, searchQuery: value });
   };
@@ -32,6 +36,53 @@ export default function PromptFiltersComponent({ filters, onFiltersChange }: Pro
     onFiltersChange({});
   };
 
+  const exportToJSON = () => {
+    const dataToExport = hasActiveFilters ? filteredPrompts : prompts;
+    
+    const exportData = {
+      exportDate: new Date().toISOString(),
+      exportedBy: "سیستم مدیریت پرامپت‌های هوش مصنوعی",
+      filterApplied: hasActiveFilters,
+      totalCount: dataToExport.length,
+      filters: hasActiveFilters ? {
+        searchQuery: filters.searchQuery || null,
+        category: filters.category || null,
+        modelType: filters.modelType || null
+      } : null,
+      prompts: dataToExport.map(prompt => ({
+        id: prompt.id,
+        title: prompt.title,
+        content: prompt.content,
+        category: prompt.category,
+        modelType: prompt.modelType,
+        tags: prompt.tags,
+        createdAt: prompt.createdAt,
+        updatedAt: prompt.updatedAt,
+        hasVersionHistory: !!(prompt.versions && prompt.versions.length > 0),
+        versionsCount: prompt.versions?.length || 0
+      }))
+    };
+
+    const jsonString = JSON.stringify(exportData, null, 2);
+    const blob = new Blob([jsonString], { type: 'application/json; charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    
+    const link = document.createElement('a');
+    link.href = url;
+    const dateStr = new Date().toISOString().split('T')[0];
+    const filterStr = hasActiveFilters ? '-filtered' : '-all';
+    link.download = `prompts-export${filterStr}-${dateStr}.json`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+
+    toast({
+      title: "خروجی گرفته شد!",
+      description: `${dataToExport.length} پرامپت ${hasActiveFilters ? 'فیلتر شده' : ''} به صورت JSON ذخیره شد.`,
+    });
+  };
+
   const hasActiveFilters = filters.category || filters.modelType || filters.searchQuery;
 
   return (
@@ -41,61 +92,74 @@ export default function PromptFiltersComponent({ filters, onFiltersChange }: Pro
         فیلتر و جستجو
       </div>
       
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
-        <div className="relative">
-          <Search className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
-          <Input
-            placeholder="جستجو در پرامپت‌ها..."
-            value={filters.searchQuery || ""}
-            onChange={(e) => handleSearchChange(e.target.value)}
-            className="pl-3 pr-10 bg-background/70"
-          />
+      <div className="flex items-center justify-between">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-3 flex-1">
+          <div className="relative">
+            <Search className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
+            <Input
+              placeholder="جستجو در پرامپت‌ها..."
+              value={filters.searchQuery || ""}
+              onChange={(e) => handleSearchChange(e.target.value)}
+              className="pl-3 pr-10 bg-background/70"
+            />
+          </div>
+
+          <Select 
+            value={filters.category || "همه"} 
+            onValueChange={handleCategoryChange}
+          >
+            <SelectTrigger className="bg-background/70">
+              <SelectValue placeholder="دسته‌بندی" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="همه">همه دسته‌ها</SelectItem>
+              {CATEGORIES.map((category) => (
+                <SelectItem key={category} value={category}>
+                  {category}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+
+          <Select 
+            value={filters.modelType || "همه"} 
+            onValueChange={handleModelTypeChange}
+          >
+            <SelectTrigger className="bg-background/70">
+              <SelectValue placeholder="نوع مدل" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="همه">همه مدل‌ها</SelectItem>
+              {MODEL_TYPES.map((model) => (
+                <SelectItem key={model} value={model}>
+                  {model}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+
+          {hasActiveFilters && (
+            <Button
+              variant="outline"
+              onClick={handleClearFilters}
+              className="hover:bg-destructive/10 hover:text-destructive hover:border-destructive/30"
+            >
+              <X className="w-4 h-4 ml-1" />
+              پاک کردن
+            </Button>
+          )}
         </div>
-
-        <Select 
-          value={filters.category || "همه"} 
-          onValueChange={handleCategoryChange}
-        >
-          <SelectTrigger className="bg-background/70">
-            <SelectValue placeholder="دسته‌بندی" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="همه">همه دسته‌ها</SelectItem>
-            {CATEGORIES.map((category) => (
-              <SelectItem key={category} value={category}>
-                {category}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-
-        <Select 
-          value={filters.modelType || "همه"} 
-          onValueChange={handleModelTypeChange}
-        >
-          <SelectTrigger className="bg-background/70">
-            <SelectValue placeholder="نوع مدل" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="همه">همه مدل‌ها</SelectItem>
-            {MODEL_TYPES.map((model) => (
-              <SelectItem key={model} value={model}>
-                {model}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-
-        {hasActiveFilters && (
+        
+        <div className="flex gap-2 mr-4">
           <Button
             variant="outline"
-            onClick={handleClearFilters}
-            className="hover:bg-destructive/10 hover:text-destructive hover:border-destructive/30"
+            onClick={exportToJSON}
+            className="hover:bg-primary/10 hover:border-primary/30"
+            title={hasActiveFilters ? "خروجی پرامپت‌های فیلتر شده" : "خروجی تمام پرامپت‌ها"}
           >
-            <X className="w-4 h-4 ml-1" />
-            پاک کردن
+            <Download className="w-4 h-4" />
           </Button>
-        )}
+        </div>
       </div>
     </div>
   );
