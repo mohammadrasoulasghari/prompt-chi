@@ -24,7 +24,7 @@ RUN npm ci
 COPY --from=builder /app/dist ./dist
 
 # Configure environment
-ENV PORT=4173
+ENV PORT=3131
 ENV HOST=0.0.0.0
 
 # Expose port and start app

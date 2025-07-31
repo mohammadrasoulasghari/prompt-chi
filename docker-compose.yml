@@ -3,13 +3,13 @@ services:
   app:
     build: .                                          # Build from local Dockerfile
     ports:
-      - "${PORT:-4173}:${PORT:-4173}"                # Map host port to container port
+      - "${PORT:-3131}:${PORT:-3131}"                # Map host port to container port
     environment:
-      - PORT=${PORT:-4173}                           # Application port
+      - PORT=${PORT:-3131}                           # Application port
       - HOST=${HOST:-0.0.0.0}                        # Bind address
     restart: unless-stopped                          # Auto-restart on failure
     healthcheck:                                     # Health monitoring
-      test: ["CMD", "sh", "-c", "nc -z localhost ${PORT:-4173} || exit 1"]
+      test: ["CMD", "sh", "-c", "nc -z localhost ${PORT:-3131} || exit 1"]
       interval: 30s
       timeout: 10s
       retries: 3

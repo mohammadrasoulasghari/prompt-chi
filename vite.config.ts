@@ -5,7 +5,7 @@ import { componentTagger } from "lovable-tagger";
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
-  const port = parseInt(process.env.PORT || '4173');
+  const port = parseInt(process.env.PORT || '3131');
   const host = process.env.HOST || '0.0.0.0';
 
   return {
