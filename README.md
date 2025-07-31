@@ -122,8 +122,6 @@ npm run dev
 
 ## 🎨 تصاویر
 
-<details>
-<summary>📸 اسکرین‌شات‌های اپلیکیشن</summary>
 
 ### صفحه اصلی - تم روشن
 ![Light Theme](./art//light-mode.png)
@@ -137,7 +135,6 @@ npm run dev
 ### نمایش تاریخچه نسخه‌ها
 ![Version History](./art/recovery.png)
 
-</details>
 
 ## 🤝 مشارکت در پروژه
 
