@@ -259,6 +259,23 @@ export default function Index() {
           </div>
         )}
       </div>
+      
+      {/* Footer */}
+      <footer className="bg-card/30 backdrop-blur-sm border-t border-accent/30 mt-12">
+        <div className="container mx-auto px-4 py-6 text-center">
+          <p className="text-sm text-muted-foreground">
+            Powered by{" "}
+            <a 
+              href="https://mohammadrasoulasghari.ir" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-primary hover:text-primary-glow transition-colors font-medium"
+            >
+              mohammadrasoulasghari
+            </a>
+          </p>
+        </div>
+      </footer>
     </div>
   );
 }
