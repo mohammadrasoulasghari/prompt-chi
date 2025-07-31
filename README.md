@@ -126,16 +126,16 @@ npm run dev
 <summary>📸 اسکرین‌شات‌های اپلیکیشن</summary>
 
 ### صفحه اصلی - تم روشن
-![Light Theme](path-to-light-theme-screenshot)
+![Light Theme](./art//light-mode.png)
 
 ### صفحه اصلی - تم تاریک  
-![Dark Theme](path-to-dark-theme-screenshot)
+![Dark Theme](./art/dark-mode.png)
 
 ### فرم اضافه کردن پرامپت
-![Add Prompt Form](path-to-form-screenshot)
+![Add Prompt Form](./art/new-prompt.png)
 
 ### نمایش تاریخچه نسخه‌ها
-![Version History](path-to-history-screenshot)
+![Version History](./art/recovery.png)
 
 </details>
 
