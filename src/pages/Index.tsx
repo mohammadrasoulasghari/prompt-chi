@@ -1,13 +1,14 @@
 import { useState, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
-import { Plus, Sparkles, Database, Zap } from "lucide-react";
+import { Plus, Sparkles, Database, Zap, Moon, Sun } from "lucide-react";
 import { Prompt, PromptFilters, PromptVersion } from "@/types/prompt";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import PromptCard from "@/components/PromptCard";
 import PromptForm from "@/components/PromptForm";
 import PromptFiltersComponent from "@/components/PromptFilters";
 import { useToast } from "@/hooks/use-toast";
+import { useTheme } from "@/components/ThemeProvider";
 
 export default function Index() {
   const [prompts, setPrompts] = useLocalStorage<Prompt[]>("prompts", []);
@@ -15,6 +16,7 @@ export default function Index() {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [filters, setFilters] = useState<PromptFilters>({});
   const { toast } = useToast();
+  const { theme, setTheme } = useTheme();
 
   const filteredPrompts = useMemo(() => {
     return prompts.filter((prompt) => {
@@ -41,8 +43,8 @@ export default function Index() {
     setPrompts([newPrompt, ...prompts]);
     setIsFormOpen(false);
     toast({
-      title: "پرامپت اضافه شد!",
-      description: "پرامپت جدید با موفقیت ذخیره شد.",
+      title: "آفرین! اضافه شد",
+      description: "پرامپت جدیدت ذخیره شد",
     });
   };
 
@@ -73,8 +75,8 @@ export default function Index() {
     setEditingPrompt(null);
     setIsFormOpen(false);
     toast({
-      title: "پرامپت به‌روزرسانی شد!",
-      description: "تغییرات با موفقیت ذخیره شد.",
+      title: "عالی! ویرایش شد",
+      description: "تغییراتت ذخیره شد",
     });
   };
 
@@ -107,16 +109,16 @@ export default function Index() {
 
     setPrompts(prompts.map(p => p.id === promptId ? restoredPrompt : p));
     toast({
-      title: "نسخه بازگردانی شد!",
-      description: "پرامپت به نسخه انتخابی بازگردانده شد.",
+      title: "بازگشت کرد!",
+      description: "پرامپت به نسخه قدیمی برگشت",
     });
   };
 
   const handleDeletePrompt = (id: string) => {
     setPrompts(prompts.filter(p => p.id !== id));
     toast({
-      title: "پرامپت حذف شد",
-      description: "پرامپت با موفقیت حذف شد.",
+      title: "حذف شد",
+      description: "پرامپت پاک شد",
       variant: "destructive",
     });
   };
@@ -145,31 +147,44 @@ export default function Index() {
             <div className="text-center md:text-right">
               <h1 className="text-3xl font-bold bg-gradient-to-r from-primary to-primary-glow bg-clip-text text-transparent flex items-center justify-center md:justify-start gap-2">
                 <Sparkles className="w-8 h-8 text-primary" />
-                مدیریت پرامپت‌های هوش مصنوعی
+                پرامپت چی
               </h1>
               <p className="text-muted-foreground mt-2">
-                مجموعه پرامپت‌های خود را سازماندهی و مدیریت کنید
+                پرامپت‌هاتو راحت و ساده نگهداری کن
               </p>
             </div>
             
-            <Dialog open={isFormOpen} onOpenChange={setIsFormOpen}>
-              <DialogTrigger asChild>
-                <Button 
-                  onClick={openAddForm}
-                  className="bg-gradient-to-r from-primary to-primary-glow hover:opacity-90 transition-opacity"
-                >
-                  <Plus className="w-4 h-4 ml-2" />
-                  پرامپت جدید
-                </Button>
-              </DialogTrigger>
-              <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
-                <PromptForm
-                  prompt={editingPrompt}
-                  onSubmit={editingPrompt ? handleEditPrompt : handleAddPrompt}
-                  onCancel={closeForm}
-                />
-              </DialogContent>
-            </Dialog>
+            <div className="flex items-center gap-3">
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+                className="rounded-full hover:bg-accent"
+              >
+                <Sun className="h-5 w-5 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+                <Moon className="absolute h-5 w-5 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+                <span className="sr-only">تغییر تم</span>
+              </Button>
+              
+              <Dialog open={isFormOpen} onOpenChange={setIsFormOpen}>
+                <DialogTrigger asChild>
+                  <Button 
+                    onClick={openAddForm}
+                    className="bg-gradient-to-r from-primary to-primary-glow hover:opacity-90 transition-opacity"
+                  >
+                    <Plus className="w-4 h-4 ml-2" />
+                    پرامپت جدید
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+                  <PromptForm
+                    prompt={editingPrompt}
+                    onSubmit={editingPrompt ? handleEditPrompt : handleAddPrompt}
+                    onCancel={closeForm}
+                  />
+                </DialogContent>
+              </Dialog>
+            </div>
           </div>
         </div>
       </div>
@@ -191,7 +206,7 @@ export default function Index() {
                 <Database className="w-5 h-5 text-primary" />
               </div>
               <div>
-                <p className="text-sm text-muted-foreground">کل پرامپت‌ها</p>
+                <p className="text-sm text-muted-foreground">همه پرامپت‌ها</p>
                 <p className="text-2xl font-bold text-foreground">{prompts.length}</p>
               </div>
             </div>
@@ -203,7 +218,7 @@ export default function Index() {
                 <Zap className="w-5 h-5 text-primary" />
               </div>
               <div>
-                <p className="text-sm text-muted-foreground">نمایش داده شده</p>
+                <p className="text-sm text-muted-foreground">نمایش فعلی</p>
                 <p className="text-2xl font-bold text-foreground">{filteredPrompts.length}</p>
               </div>
             </div>
@@ -215,7 +230,7 @@ export default function Index() {
                 <Sparkles className="w-5 h-5 text-primary" />
               </div>
               <div>
-                <p className="text-sm text-muted-foreground">دسته‌بندی‌ها</p>
+                <p className="text-sm text-muted-foreground">دسته‌ها</p>
                 <p className="text-2xl font-bold text-foreground">
                   {new Set(prompts.map(p => p.category)).size}
                 </p>
@@ -230,17 +245,17 @@ export default function Index() {
             <div className="bg-card/50 backdrop-blur-sm rounded-lg p-8 border border-accent/30 max-w-md mx-auto">
               <Sparkles className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
               <h3 className="text-lg font-semibold text-foreground mb-2">
-                {prompts.length === 0 ? "هنوز پرامپتی اضافه نکرده‌اید" : "نتیجه‌ای یافت نشد"}
+                {prompts.length === 0 ? "هیچی اینجا نیست!" : "چیزی پیدا نشد"}
               </h3>
               <p className="text-muted-foreground mb-4">
                 {prompts.length === 0 
-                  ? "اولین پرامپت خود را اضافه کنید تا شروع کنید" 
-                  : "فیلترهای خود را تغییر دهید یا جستجوی جدیدی انجام دهید"}
+                  ? "بیا اولین پرامپتتو بسازیم" 
+                  : "یه چیز دیگه جستجو کن یا فیلترها رو عوض کن"}
               </p>
               {prompts.length === 0 && (
                 <Button onClick={openAddForm} className="bg-gradient-to-r from-primary to-primary-glow">
                   <Plus className="w-4 h-4 ml-2" />
-                  افزودن اولین پرامپت
+                  بساز اولین پرامپتو
                 </Button>
               )}
             </div>
