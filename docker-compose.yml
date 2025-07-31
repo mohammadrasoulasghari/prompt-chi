@@ -1,7 +1,16 @@
-version: '3'
+# Docker Compose configuration for Quick Prompt Box
 services:
   app:
-    build: .
+    build: .                                          # Build from local Dockerfile
     ports:
-      - "3000:3000"
-    restart: unless-stopped
+      - "${PORT:-4173}:${PORT:-4173}"                # Map host port to container port
+    environment:
+      - PORT=${PORT:-4173}                           # Application port
+      - HOST=${HOST:-0.0.0.0}                        # Bind address
+    restart: unless-stopped                          # Auto-restart on failure
+    healthcheck:                                     # Health monitoring
+      test: ["CMD", "sh", "-c", "nc -z localhost ${PORT:-4173} || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
