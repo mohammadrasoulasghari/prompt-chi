@@ -17,13 +17,13 @@ export default function PromptFiltersComponent({ filters, onFiltersChange, promp
   
   const getModelIcon = (model: string) => {
     switch (model) {
-      case "ChatGPT": return MessageSquare;
-      case "Claude": return Bot;
-      case "Gemini": return Zap;
-      case "Midjourney": return Palette;
-      case "DALL-E": return Image;
-      case "Stable Diffusion": return Wand2;
-      default: return Cpu;
+      case "ChatGPT": return <span className="text-green-500 font-bold">🤖</span>;
+      case "Claude": return <span className="text-orange-500 font-bold">🧠</span>;
+      case "Gemini": return <span className="text-blue-500 font-bold">⭐</span>;
+      case "Midjourney": return <span className="text-purple-500 font-bold">🎨</span>;
+      case "DALL-E": return <span className="text-blue-600 font-bold">🖼️</span>;
+      case "Stable Diffusion": return <span className="text-green-600 font-bold">🔥</span>;
+      default: return <span className="text-gray-500 font-bold">💻</span>;
     }
   };
 
@@ -121,7 +121,7 @@ export default function PromptFiltersComponent({ filters, onFiltersChange, promp
             value={filters.category || "همه"} 
             onValueChange={handleCategoryChange}
           >
-            <SelectTrigger className="bg-background/70 text-right [&>span]:text-right">
+            <SelectTrigger className="bg-background/70 flex-row-reverse">
               <SelectValue placeholder="دسته‌بندی" />
             </SelectTrigger>
             <SelectContent align="end">
@@ -138,23 +138,23 @@ export default function PromptFiltersComponent({ filters, onFiltersChange, promp
             value={filters.modelType || "همه"} 
             onValueChange={handleModelTypeChange}
           >
-            <SelectTrigger className="bg-background/70 text-right [&>span]:text-right">
+            <SelectTrigger className="bg-background/70 flex-row-reverse">
               <SelectValue placeholder="نوع مدل" />
             </SelectTrigger>
             <SelectContent align="end">
               <SelectItem value="همه" className="text-right">
                 <div className="flex items-center gap-2 w-full justify-end">
                   <span>همه مدل‌ها</span>
-                  <Cpu className="w-4 h-4" />
+                  <span className="text-gray-500 font-bold">💻</span>
                 </div>
               </SelectItem>
               {MODEL_TYPES.map((model) => {
-                const ModelIcon = getModelIcon(model);
+                const modelIcon = getModelIcon(model);
                 return (
                   <SelectItem key={model} value={model} className="text-right">
                     <div className="flex items-center gap-2 w-full justify-end">
                       <span>{model}</span>
-                      <ModelIcon className="w-4 h-4" />
+                      {modelIcon}
                     </div>
                   </SelectItem>
                 );

@@ -18,13 +18,13 @@ export default function PromptCard({ prompt, onEdit, onDelete, onRestoreVersion 
 
   const getModelIcon = (model: string) => {
     switch (model) {
-      case "ChatGPT": return MessageSquare;
-      case "Claude": return Bot;
-      case "Gemini": return Zap;
-      case "Midjourney": return Palette;
-      case "DALL-E": return Image;
-      case "Stable Diffusion": return Wand2;
-      default: return Cpu;
+      case "ChatGPT": return <span className="text-green-500 font-bold">🤖</span>;
+      case "Claude": return <span className="text-orange-500 font-bold">🧠</span>;
+      case "Gemini": return <span className="text-blue-500 font-bold">⭐</span>;
+      case "Midjourney": return <span className="text-purple-500 font-bold">🎨</span>;
+      case "DALL-E": return <span className="text-blue-600 font-bold">🖼️</span>;
+      case "Stable Diffusion": return <span className="text-green-600 font-bold">🔥</span>;
+      default: return <span className="text-gray-500 font-bold">💻</span>;
     }
   };
 
@@ -68,10 +68,10 @@ export default function PromptCard({ prompt, onEdit, onDelete, onRestoreVersion 
             </Badge>
             <Badge variant="outline" className="text-xs flex items-center gap-1">
               {(() => {
-                const ModelIcon = getModelIcon(prompt.modelType);
+                const modelIcon = getModelIcon(prompt.modelType);
                 return (
                   <>
-                    <ModelIcon className="w-3 h-3" />
+                    {modelIcon}
                     {prompt.modelType}
                   </>
                 );
