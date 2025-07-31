@@ -3,7 +3,7 @@ export interface PromptVersion {
   title: string;
   content: string;
   category: string;
-  model_types: string[];
+  modelType: string;
   tags: string[];
   timestamp: Date;
   changeNote?: string;
@@ -14,9 +14,8 @@ export interface Prompt {
   title: string;
   content: string;
   category: string;
-  model_types: string[];
+  modelType: string;
   tags: string[];
-  is_favorite: boolean;
   createdAt: Date;
   updatedAt: Date;
   versions?: PromptVersion[];
@@ -24,7 +23,7 @@ export interface Prompt {
 
 export interface PromptFilters {
   category?: string;
-  model_types?: string[];
+  modelType?: string;
   searchQuery?: string;
 }
 

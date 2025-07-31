@@ -1,9 +1,8 @@
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Edit, Trash2, Copy, Calendar, Star } from "lucide-react";
-import { PromptVersion } from "@/types/prompt";
-import { Prompt } from "@/hooks/usePrompts";
+import { Edit, Trash2, Copy, Calendar } from "lucide-react";
+import { Prompt, PromptVersion } from "@/types/prompt";
 import { useToast } from "@/hooks/use-toast";
 import PromptHistory from "./PromptHistory";
 
@@ -11,11 +10,10 @@ interface PromptCardProps {
   prompt: Prompt;
   onEdit: (prompt: Prompt) => void;
   onDelete: (id: string) => void;
-  onToggleFavorite: (id: string) => void;
   onRestoreVersion: (promptId: string, version: PromptVersion) => void;
 }
 
-export default function PromptCard({ prompt, onEdit, onDelete, onToggleFavorite, onRestoreVersion }: PromptCardProps) {
+export default function PromptCard({ prompt, onEdit, onDelete, onRestoreVersion }: PromptCardProps) {
   const { toast } = useToast();
 
   const handleCopy = async () => {
@@ -49,19 +47,13 @@ export default function PromptCard({ prompt, onEdit, onDelete, onToggleFavorite,
           <h3 className="font-semibold text-lg text-foreground group-hover:text-primary transition-colors">
             {prompt.title}
           </h3>
-          <div className="flex gap-1 items-center">
+          <div className="flex gap-1">
             <Badge variant="secondary" className="text-xs bg-primary/10 text-primary">
               {prompt.category}
             </Badge>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => onToggleFavorite(prompt.id)}
-              className="p-1 h-6 w-6 hover:bg-yellow-100 hover:text-yellow-600"
-              title={prompt.is_favorite ? "حذف از علاقه‌مندی‌ها" : "افزودن به علاقه‌مندی‌ها"}
-            >
-              <Star className={`w-4 h-4 ${prompt.is_favorite ? 'fill-yellow-500 text-yellow-500' : ''}`} />
-            </Button>
+            <Badge variant="outline" className="text-xs">
+              {prompt.modelType}
+            </Badge>
           </div>
         </div>
       </CardHeader>
@@ -71,18 +63,8 @@ export default function PromptCard({ prompt, onEdit, onDelete, onToggleFavorite,
           {prompt.content}
         </p>
         
-        {prompt.model_types && prompt.model_types.length > 0 && (
-          <div className="flex flex-wrap gap-1 mt-3">
-            {prompt.model_types.map((model, index) => (
-              <Badge key={index} variant="outline" className="text-xs bg-blue-50 text-blue-700 border-blue-200">
-                {model}
-              </Badge>
-            ))}
-          </div>
-        )}
-
         {prompt.tags.length > 0 && (
-          <div className="flex flex-wrap gap-1 mt-2">
+          <div className="flex flex-wrap gap-1 mt-3">
             {prompt.tags.map((tag, index) => (
               <Badge key={index} variant="outline" className="text-xs bg-accent/50">
                 #{tag}
@@ -93,7 +75,7 @@ export default function PromptCard({ prompt, onEdit, onDelete, onToggleFavorite,
         
         <div className="flex items-center gap-1 mt-3 text-xs text-muted-foreground">
           <Calendar className="w-3 h-3" />
-          <span>ایجاد: {formatDate(new Date(prompt.created_at))}</span>
+          <span>ایجاد: {formatDate(prompt.createdAt)}</span>
         </div>
       </CardContent>
       
@@ -124,7 +106,12 @@ export default function PromptCard({ prompt, onEdit, onDelete, onToggleFavorite,
           >
             <Trash2 className="w-4 h-4" />
           </Button>
-          {/* Version history will be added later */}
+          {prompt.versions && prompt.versions.length > 0 && (
+            <PromptHistory 
+              versions={prompt.versions} 
+              onRestoreVersion={(version) => onRestoreVersion(prompt.id, version)}
+            />
+          )}
         </div>
       </CardFooter>
     </Card>

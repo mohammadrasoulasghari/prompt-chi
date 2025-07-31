@@ -7,12 +7,11 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { X, Plus, Sparkles } from "lucide-react";
-import { CATEGORIES, MODEL_TYPES } from "@/types/prompt";
-import { Prompt } from "@/hooks/usePrompts";
+import { Prompt, CATEGORIES, MODEL_TYPES } from "@/types/prompt";
 
 interface PromptFormProps {
   prompt?: Prompt | null;
-  onSubmit: (prompt: Omit<Prompt, 'id' | 'created_at' | 'updated_at' | 'user_id'>) => void;
+  onSubmit: (prompt: Omit<Prompt, 'id' | 'createdAt' | 'updatedAt'>) => void;
   onCancel: () => void;
 }
 
@@ -20,7 +19,7 @@ export default function PromptForm({ prompt, onSubmit, onCancel }: PromptFormPro
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [category, setCategory] = useState("");
-  const [modelTypes, setModelTypes] = useState<string[]>([]);
+  const [modelType, setModelType] = useState("");
   const [tags, setTags] = useState<string[]>([]);
   const [newTag, setNewTag] = useState("");
 
@@ -29,7 +28,7 @@ export default function PromptForm({ prompt, onSubmit, onCancel }: PromptFormPro
       setTitle(prompt.title);
       setContent(prompt.content);
       setCategory(prompt.category);
-      setModelTypes(prompt.model_types || []);
+      setModelType(prompt.modelType);
       setTags(prompt.tags);
     } else {
       resetForm();
@@ -40,7 +39,7 @@ export default function PromptForm({ prompt, onSubmit, onCancel }: PromptFormPro
     setTitle("");
     setContent("");
     setCategory("");
-    setModelTypes([]);
+    setModelType("");
     setTags([]);
     setNewTag("");
   };
@@ -58,15 +57,14 @@ export default function PromptForm({ prompt, onSubmit, onCancel }: PromptFormPro
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!title.trim() || !content.trim() || !category || modelTypes.length === 0) return;
+    if (!title.trim() || !content.trim() || !category || !modelType) return;
 
     onSubmit({
       title: title.trim(),
       content: content.trim(),
       category,
-      model_types: modelTypes,
-      tags,
-      is_favorite: false
+      modelType,
+      tags
     });
     
     if (!prompt) {
@@ -104,7 +102,7 @@ export default function PromptForm({ prompt, onSubmit, onCancel }: PromptFormPro
             />
           </div>
 
-          <div className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="category" className="text-sm font-medium">دسته‌بندی</Label>
               <Select value={category} onValueChange={setCategory} required>
@@ -120,26 +118,17 @@ export default function PromptForm({ prompt, onSubmit, onCancel }: PromptFormPro
             </div>
 
             <div className="space-y-2">
-              <Label className="text-sm font-medium">مدل‌های مناسب (چندتایی انتخاب کنید)</Label>
-              <div className="grid grid-cols-2 gap-2">
-                {MODEL_TYPES.map((model) => (
-                  <Label key={model} className="flex items-center gap-2 text-sm cursor-pointer">
-                    <input
-                      type="checkbox"
-                      checked={modelTypes.includes(model)}
-                      onChange={(e) => {
-                        if (e.target.checked) {
-                          setModelTypes([...modelTypes, model]);
-                        } else {
-                          setModelTypes(modelTypes.filter(m => m !== model));
-                        }
-                      }}
-                      className="rounded"
-                    />
-                    {model}
-                  </Label>
-                ))}
-              </div>
+              <Label htmlFor="modelType" className="text-sm font-medium">نوع مدل</Label>
+              <Select value={modelType} onValueChange={setModelType} required>
+                <SelectTrigger className="bg-background/50">
+                  <SelectValue placeholder="انتخاب مدل" />
+                </SelectTrigger>
+                <SelectContent>
+                  {MODEL_TYPES.map((model) => (
+                    <SelectItem key={model} value={model}>{model}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
           </div>
 
