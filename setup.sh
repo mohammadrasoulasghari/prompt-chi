@@ -2,7 +2,7 @@
 
 set -e
 
-echo "🚀 Starting Quick Prompt Box setup..."
+echo "🚀 Starting Prompt Chi setup..."
 
 # 1. Install Docker if not present
 if ! [ -x "$(command -v docker)" ]; then
@@ -15,14 +15,14 @@ else
 fi
 
 # 2. Clone the project (if needed)
-if [ -d "quick-prompt-box" ]; then
-  echo "📁 Existing 'quick-prompt-box' folder found. Removing it..."
-  rm -rf quick-prompt-box
+if [ -d "prompt-chi" ]; then
+  echo "📁 Existing 'prompt-chi' folder found. Removing it..."
+  rm -rf prompt-chi
 fi
 
-echo "📥 Cloning the Quick Prompt Box project from GitHub..."
-git clone https://github.com/mohammadrasoulasghari/quick-prompt-box.git
-cd quick-prompt-box
+echo "📥 Cloning the Prompt Chi project from GitHub..."
+git clone https://github.com/mohammadrasoulasghari/prompt-chi.git
+cd prompt-chi
 
 # 3. Ask user for port
 echo ""
@@ -62,10 +62,10 @@ sleep 3
 
 # 7. Final message
 echo ""
-echo "🎉 Quick Prompt Box is now running!"
+echo "🎉 Prompt Chi is now running!"
 echo "🌐 Open your browser and visit: http://localhost:$PORT"
 echo ""
-echo "📦 GitHub Repository: https://github.com/mohammadrasoulasghari/quick-prompt-box"
+echo "📦 GitHub Repository: https://github.com/mohammadrasoulasghari/prompt-chi"
 echo "👤 Created by Mohammadrasoul Asghari — https://mohammadrasoulasghari.ir"
 echo ""
 echo "📋 Useful commands:"

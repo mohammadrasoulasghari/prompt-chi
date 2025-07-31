@@ -1,4 +1,4 @@
-# 🚀 راهنمای نصب آسان Quick Prompt Box
+# 🚀 راهنمای نصب آسان Prompt Chi
 
 ## نصب خودکار با اسکریپت
 
@@ -6,14 +6,14 @@
 
 ```bash
 # دانلود و اجرای اسکریپت setup
-curl -fsSL https://raw.githubusercontent.com/mohammadrasoulasghari/quick-prompt-box/main/setup.sh | bash
+curl -fsSL https://raw.githubusercontent.com/mohammadrasoulasghari/prompt-chi/main/setup.sh | bash
 ```
 
 ### روش ۲: دانلود محلی و اجرا
 
 ```bash
 # دانلود فایل setup
-wget https://raw.githubusercontent.com/mohammadrasoulasghari/quick-prompt-box/main/setup.sh
+wget https://raw.githubusercontent.com/mohammadrasoulasghari/prompt-chi/main/setup.sh
 
 # اعطای مجوز اجرا
 chmod +x setup.sh
@@ -42,9 +42,9 @@ chmod +x setup.sh
 ## نمونه اجرا
 
 ```
-🚀 Starting Quick Prompt Box setup...
+🚀 Starting Prompt Chi setup...
 ✅ Docker is already installed.
-📥 Cloning the Quick Prompt Box project from GitHub...
+📥 Cloning the Prompt Chi project from GitHub...
 
 🌐 Port Configuration
 Default port is 3131. You can change it or press Enter to use default.
@@ -55,7 +55,7 @@ Using custom port: 8080
 🐳 Building and starting the Docker container...
 ⏳ Waiting for container to start...
 
-🎉 Quick Prompt Box is now running!
+🎉 Prompt Chi is now running!
 🌐 Open your browser and visit: http://localhost:8080
 ```
 

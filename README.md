@@ -1,21 +1,21 @@
 <div align="center">
    
-# 🚀 Quick Prompt Box | جعبه پرامپت سریع
+# 🚀 Prompt Chi | پرامپت چی
 
 </div>
 
 <div align="center">
 
-![Quick Prompt Box Banner](https://img.shields.io/badge/Quick%20Prompt%20Box-2B7DE9?style=for-the-badge&logo=openai&logoColor=white)
+![Prompt Chi Banner](https://img.shields.io/badge/Prompt%20Chi-2B7DE9?style=for-the-badge&logo=openai&logoColor=white)
 
-**ابزار سریع و قدرتمند مدیریت پرامپت‌های AI | Fast & Powerful AI Prompt Management Tool**
+**ابزار هوشمند مدیریت پرامپت‌های AI | Smart AI Prompt Management Tool**
 
 [![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)](https://reactjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
 [![Vite](https://img.shields.io/badge/Vite-B73BFE?style=for-the-badge&logo=vite&logoColor=FFD62E)](https://vitejs.dev/)
 
-[🐛 **گزارش مشکل**](https://github.com/mohammadrasoulasghari/quick-prompt-box/issues) 
+[🐛 **گزارش مشکل**](https://github.com/mohammadrasoulasghari/prompt-chi/issues) | [🌐 **مشاهده دمو**](https://prompt-chi.netlify.app/) 
 
 </div>
 
@@ -26,7 +26,7 @@
 یک دستور ساده برای نصب و راه‌اندازی:
 
 ```bash
-bash <(curl -fsSL https://raw.githubusercontent.com/mohammadrasoulasghari/quick-prompt-box/main/setup.sh)
+bash <(curl -fsSL https://raw.githubusercontent.com/mohammadrasoulasghari/prompt-chi/main/setup.sh)
 ```
 
 > 🚀 **فقط یک دستور!** Docker خودکار نصب می‌شود، پورت را انتخاب کنید و ظرف چند دقیقه آماده است.
@@ -35,7 +35,7 @@ bash <(curl -fsSL https://raw.githubusercontent.com/mohammadrasoulasghari/quick-
 
 ## 🎯 درباره پروژه
 
-**Quick Prompt Box** یک ابزار سریع، قدرتمند و کاربرپسند برای مدیریت، ذخیره‌سازی و سازماندهی پرامپت‌های مختلف AI است. این پروژه به گونه‌ای طراحی شده که تجربه کاری شما با مدل‌های مختلف هوش مصنوعی را بهبود بخشد و به شما کمک کند تا پرامپت‌های خود را به صورت حرفه‌ای و سریع مدیریت کنید.
+**Prompt Chi** یک ابزار هوشمند، قدرتمند و کاربرپسند برای مدیریت، ذخیره‌سازی و سازماندهی پرامپت‌های مختلف AI است. این پروژه به گونه‌ای طراحی شده که تجربه کاری شما با مدل‌های مختلف هوش مصنوعی را بهبود بخشد و به شما کمک کند تا پرامپت‌های خود را به صورت حرفه‌ای مدیریت کنید.
 
 ### 🌟 ویژگی‌های کلیدی
 
@@ -49,7 +49,7 @@ bash <(curl -fsSL https://raw.githubusercontent.com/mohammadrasoulasghari/quick-
 - 📱 **طراحی ریسپانسیو**: سازگار با تمام دستگاه‌ها
 - 🇮🇷 **پشتیبانی کامل از فارسی**: طراحی RTL و محتوای فارسی
 
-## 💡 چرا Quick Prompt Box؟
+## 💡 چرا Prompt Chi؟
 
 ### 🎯 برای توسعه‌دهندگان
 - ذخیره پرامپت‌های کاربردی برای پروژه‌های مختلف
@@ -77,7 +77,7 @@ bash <(curl -fsSL https://raw.githubusercontent.com/mohammadrasoulasghari/quick-
 
 ```bash
 # نصب و راه‌اندازی با یک دستور
-bash <(curl -fsSL https://raw.githubusercontent.com/mohammadrasoulasghari/quick-prompt-box/main/setup.sh)
+bash <(curl -fsSL https://raw.githubusercontent.com/mohammadrasoulasghari/prompt-chi/main/setup.sh)
 ```
 
 ✅ **ویژگی‌ها:**
@@ -89,8 +89,8 @@ bash <(curl -fsSL https://raw.githubusercontent.com/mohammadrasoulasghari/quick-
 
 ```bash
 # Clone کردن پروژه
-git clone https://github.com/mohammadrasoulasghari/quick-prompt-box.git
-cd quick-prompt-box
+git clone https://github.com/mohammadrasoulasghari/prompt-chi.git
+cd prompt-chi
 
 # اجرا با Docker
 docker compose up -d
@@ -104,8 +104,8 @@ docker compose up -d
 
 ```bash
 # Clone کردن پروژه
-git clone https://github.com/mohammadrasoulasghari/quick-prompt-box.git
-cd quick-prompt-box
+git clone https://github.com/mohammadrasoulasghari/prompt-chi.git
+cd prompt-chi
 
 # نصب Dependencies
 npm install
@@ -117,6 +117,7 @@ npm run dev
 ### 🌐 دسترسی به اپلیکیشن
 - **Docker**: `http://localhost:3131` (یا پورت انتخابی)
 - **Development**: `http://localhost:5173`
+- **Demo آنلاین**: [prompt-chi.netlify.app](https://prompt-chi.netlify.app/)
 
 ## 📖 نحوه استفاده
 
@@ -183,7 +184,7 @@ npm run dev
 ### راهنمای توسعه:
 ```bash
 # Clone کردن Fork شده
-git clone https://github.com/your-username/quick-prompt-box.git
+git clone https://github.com/your-username/prompt-chi.git
 
 # ایجاد Branch جدید
 git checkout -b feature/new-feature
@@ -204,7 +205,7 @@ git push origin feature/new-feature
 
 اگر با مشکلی مواجه شدید یا پیشنهادی دارید:
 
-1. [Issues](https://github.com/mohammadrasoulasghari/quick-prompt-box/issues) را بررسی کنید
+1. [Issues](https://github.com/mohammadrasoulasghari/prompt-chi/issues) را بررسی کنید
 2. اگر مشکل تکراری نیست، Issue جدید ایجاد کنید
 3. توضیحات کامل و گام‌های تکرار ارائه دهید
 
