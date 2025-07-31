@@ -137,7 +137,7 @@ export default function Index() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-accent/10 to-primary/5">
+    <div className="min-h-screen bg-gradient-to-br from-background via-accent/10 to-primary/5 flex flex-col">
       {/* Header */}
       <div className="bg-card/50 backdrop-blur-sm border-b border-accent/30 sticky top-0 z-40">
         <div className="container mx-auto px-4 py-6">
@@ -174,7 +174,7 @@ export default function Index() {
         </div>
       </div>
 
-      <div className="container mx-auto px-4 py-6 space-y-6">
+      <div className="container mx-auto px-4 py-6 space-y-6 flex-grow">
         {/* Filters */}
         <PromptFiltersComponent 
           filters={filters} 
