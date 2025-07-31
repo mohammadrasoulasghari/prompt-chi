@@ -1,7 +1,7 @@
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import { Search, Filter, X, Download } from "lucide-react";
+import { Search, Filter, X, Download, MessageSquare, Bot, Palette, Image, Cpu, Zap, Wand2 } from "lucide-react";
 import { CATEGORIES, MODEL_TYPES, PromptFilters, Prompt } from "@/types/prompt";
 import { useToast } from "@/hooks/use-toast";
 
@@ -14,6 +14,19 @@ interface PromptFiltersProps {
 
 export default function PromptFiltersComponent({ filters, onFiltersChange, prompts, filteredPrompts }: PromptFiltersProps) {
   const { toast } = useToast();
+  
+  const getModelIcon = (model: string) => {
+    switch (model) {
+      case "ChatGPT": return MessageSquare;
+      case "Claude": return Bot;
+      case "Gemini": return Zap;
+      case "Midjourney": return Palette;
+      case "DALL-E": return Image;
+      case "Stable Diffusion": return Wand2;
+      default: return Cpu;
+    }
+  };
+
   const handleSearchChange = (value: string) => {
     onFiltersChange({ ...filters, searchQuery: value });
   };
@@ -108,10 +121,10 @@ export default function PromptFiltersComponent({ filters, onFiltersChange, promp
             value={filters.category || "همه"} 
             onValueChange={handleCategoryChange}
           >
-            <SelectTrigger className="bg-background/70">
+            <SelectTrigger className="bg-background/70 text-right [&>span]:text-right">
               <SelectValue placeholder="دسته‌بندی" />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent align="end">
               <SelectItem value="همه">همه دسته‌ها</SelectItem>
               {CATEGORIES.map((category) => (
                 <SelectItem key={category} value={category}>
@@ -125,16 +138,27 @@ export default function PromptFiltersComponent({ filters, onFiltersChange, promp
             value={filters.modelType || "همه"} 
             onValueChange={handleModelTypeChange}
           >
-            <SelectTrigger className="bg-background/70">
+            <SelectTrigger className="bg-background/70 text-right [&>span]:text-right">
               <SelectValue placeholder="نوع مدل" />
             </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="همه">همه مدل‌ها</SelectItem>
-              {MODEL_TYPES.map((model) => (
-                <SelectItem key={model} value={model}>
-                  {model}
-                </SelectItem>
-              ))}
+            <SelectContent align="end">
+              <SelectItem value="همه" className="text-right">
+                <div className="flex items-center gap-2 w-full justify-end">
+                  <span>همه مدل‌ها</span>
+                  <Cpu className="w-4 h-4" />
+                </div>
+              </SelectItem>
+              {MODEL_TYPES.map((model) => {
+                const ModelIcon = getModelIcon(model);
+                return (
+                  <SelectItem key={model} value={model} className="text-right">
+                    <div className="flex items-center gap-2 w-full justify-end">
+                      <span>{model}</span>
+                      <ModelIcon className="w-4 h-4" />
+                    </div>
+                  </SelectItem>
+                );
+              })}
             </SelectContent>
           </Select>
 

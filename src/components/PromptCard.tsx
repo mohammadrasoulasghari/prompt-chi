@@ -1,7 +1,7 @@
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Edit, Trash2, Copy, Calendar } from "lucide-react";
+import { Edit, Trash2, Copy, Calendar, MessageSquare, Bot, Palette, Image, Cpu, Zap, Wand2 } from "lucide-react";
 import { Prompt, PromptVersion } from "@/types/prompt";
 import { useToast } from "@/hooks/use-toast";
 import PromptHistory from "./PromptHistory";
@@ -15,6 +15,18 @@ interface PromptCardProps {
 
 export default function PromptCard({ prompt, onEdit, onDelete, onRestoreVersion }: PromptCardProps) {
   const { toast } = useToast();
+
+  const getModelIcon = (model: string) => {
+    switch (model) {
+      case "ChatGPT": return MessageSquare;
+      case "Claude": return Bot;
+      case "Gemini": return Zap;
+      case "Midjourney": return Palette;
+      case "DALL-E": return Image;
+      case "Stable Diffusion": return Wand2;
+      default: return Cpu;
+    }
+  };
 
   const handleCopy = async () => {
     try {
@@ -54,8 +66,16 @@ export default function PromptCard({ prompt, onEdit, onDelete, onRestoreVersion 
             <Badge variant="secondary" className="text-xs bg-primary/10 text-primary">
               {prompt.category}
             </Badge>
-            <Badge variant="outline" className="text-xs">
-              {prompt.modelType}
+            <Badge variant="outline" className="text-xs flex items-center gap-1">
+              {(() => {
+                const ModelIcon = getModelIcon(prompt.modelType);
+                return (
+                  <>
+                    <ModelIcon className="w-3 h-3" />
+                    {prompt.modelType}
+                  </>
+                );
+              })()}
             </Badge>
           </div>
         </div>
