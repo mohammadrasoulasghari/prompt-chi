@@ -44,7 +44,10 @@ export default function PromptCard({ prompt, onEdit, onDelete, onRestoreVersion 
     <Card className="group hover:shadow-lg transition-all duration-300 bg-gradient-to-br from-card to-accent/20 border-accent/30 hover:border-primary/30">
       <CardHeader className="pb-3">
         <div className="flex justify-between items-start gap-3">
-          <h3 className="font-semibold text-lg text-foreground group-hover:text-primary transition-colors">
+          <h3 
+            className="font-semibold text-lg text-foreground group-hover:text-primary transition-colors cursor-pointer"
+            onClick={() => onEdit(prompt)}
+          >
             {prompt.title}
           </h3>
           <div className="flex gap-1">
