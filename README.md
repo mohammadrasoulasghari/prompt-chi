@@ -15,7 +15,7 @@
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
 [![Vite](https://img.shields.io/badge/Vite-B73BFE?style=for-the-badge&logo=vite&logoColor=FFD62E)](https://vitejs.dev/)
 
-[🌐 **مشاهده دمو**](https://lovable.dev/projects/358e4002-a5ce-41a0-b13e-56c6243d42c7) | [📚 **مستندات**](#-نحوه-استفاده) | [🐛 **گزارش مشکل**](https://github.com/your-username/prompt-chi/issues)
+[🐛 **گزارش مشکل**](https://github.com/mohammadrasoulasghari/prompt-chi/issues) 
 
 </div>
 
