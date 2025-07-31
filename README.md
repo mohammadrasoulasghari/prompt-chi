@@ -29,7 +29,7 @@
 bash <(curl -fsSL https://raw.githubusercontent.com/mohammadrasoulasghari/prompt-chi/main/setup.sh)
 ```
 
-> 🚀 **فقط یک دستور!** Docker خودکار نصب می‌شود، پورت را انتخاب کنید و ظرف چند دقیقه آماده است.
+> 🚀 **فقط یک دستور!** Docker خودکار نصب می‌شود(گر از قبل نصب نداشته باشید!)، پورت دلخواه تون رو انتخاب کنید و تمام.
 
 ---
 
